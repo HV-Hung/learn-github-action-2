@@ -25,16 +25,16 @@ jobs:
         push: true
         tags: ${{ secrets.DOCKERHUB_USERNAME }}/my-image:${{ github.sha }}
 
-    # - name: Install SSH client
-    #   run: sudo apt-get install -y ssh
+    - name: Install SSH client
+      run: sudo apt-get install -y ssh
 
-    # - name: Deploy to Azure VM
-    #   uses: appleboy/ssh-action@master
-    #   with:
-    #     host: ${{ secrets.AZURE_VM_IP }}
-    #     username: ${{ secrets.AZURE_VM_USERNAME }}
-    #     key: ${{ secrets.AZURE_VM_SSH_KEY }}
-    #     port: ${{ secrets.AZURE_VM_SSH_PORT }}
-    #     script: |
-    #       docker pull ${{ secrets.DOCKERHUB_USERNAME }}/my-image:${{ github.sha }}
-    #       docker run -d -p 80:80 ${{ secrets.DOCKERHUB_USERNAME }}/my-image:${{ github.sha }}
+    - name: Deploy to Azure VM
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.AZURE_VM_IP }}
+        username: ${{ secrets.AZURE_VM_USERNAME }}
+        key: ${{ secrets.AZURE_VM_SSH_KEY }}
+        port: ${{ secrets.AZURE_VM_SSH_PORT }}
+        script: |
+          sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/my-image:${{ github.sha }}
+          docker run -d -p 80:80 ${{ secrets.DOCKERHUB_USERNAME }}/my-image:${{ github.sha }}

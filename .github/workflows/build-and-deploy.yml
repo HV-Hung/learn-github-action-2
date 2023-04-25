@@ -36,7 +36,7 @@ jobs:
         key: ${{ secrets.AZURE_VM_SSH_KEY }}
         port: ${{ secrets.AZURE_VM_SSH_PORT }}
         script: |
-          sudo docker stop ${{ secrets.DOCKERHUB_USERNAME }}/my-image:${{ github.sha }}
-          docker rm ${{ secrets.DOCKERHUB_USERNAME }}/my-image:${{ github.sha }}
+          sudo docker stop my-container || true
+          sudo rm my-container || true
           sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/my-image:${{ github.sha }}
-          docker run -d -p 80:80 ${{ secrets.DOCKERHUB_USERNAME }}/my-image:${{ github.sha }}
+          docker run -d -p 80:80 --name my-container ${{ secrets.DOCKERHUB_USERNAME }}/my-image:${{ github.sha }}

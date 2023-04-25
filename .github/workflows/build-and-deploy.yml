@@ -5,44 +5,54 @@ on:
     branches: main
 
 jobs:
-  build-and-deploy:
+  echo-info:
     runs-on: ubuntu-latest
-
+    outputs: 
+      short_sha: ${{ steps.vars.outputs.sha_short }}
+      current_time: ${{ steps.get_time.outputs.time }}
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-
-    - name: Login to Docker Hub
-      uses: docker/login-action@v2
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
-
     - name: Set outputs
       id: vars
       run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
     - name: Check outputs
       run: echo ${{ steps.vars.outputs.sha_short }}
 
-    - name: Build and push Docker image
-      uses: docker/build-push-action@v2
-      with:
-        context: .
-        push: true
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/my-image:${{ steps.vars.outputs.sha_short }}
+    - name: Get current time
+      id: get_time
+      run: |
+        echo "::set-output name=time::$(date +%s)"
 
-    - name: Install SSH client
-      run: sudo apt-get install -y ssh
+    # steps:
+    # - name: Checkout code
+    #   uses: actions/checkout@v3
 
-    - name: Deploy to Azure VM
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.AZURE_VM_IP }}
-        username: ${{ secrets.AZURE_VM_USERNAME }}
-        key: ${{ secrets.AZURE_VM_SSH_KEY }}
-        port: ${{ secrets.AZURE_VM_SSH_PORT }}
-        script: |
-          sudo docker stop my-container || true
-          sudo docker rm my-container || true
-          sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/my-image:${{ steps.vars.outputs.sha_short }}
-          docker run -d -p 80:80 --name my-container ${{ secrets.DOCKERHUB_USERNAME }}/my-image:${{ steps.vars.outputs.sha_short }}
+    # - name: Login to Docker Hub
+    #   uses: docker/login-action@v2
+    #   with:
+    #     username: ${{ secrets.DOCKERHUB_USERNAME }}
+    #     password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    
+
+    # - name: Build and push Docker image
+    #   uses: docker/build-push-action@v2
+    #   with:
+    #     context: .
+    #     push: true
+    #     tags: ${{ secrets.DOCKERHUB_USERNAME }}/my-image:${{ steps.vars.outputs.sha_short }}
+
+    # - name: Install SSH client
+    #   run: sudo apt-get install -y ssh
+
+    # - name: Deploy to Azure VM
+    #   uses: appleboy/ssh-action@master
+    #   with:
+    #     host: ${{ secrets.AZURE_VM_IP }}
+    #     username: ${{ secrets.AZURE_VM_USERNAME }}
+    #     key: ${{ secrets.AZURE_VM_SSH_KEY }}
+    #     port: ${{ secrets.AZURE_VM_SSH_PORT }}
+    #     script: |
+    #       sudo docker stop my-container || true
+    #       sudo docker rm my-container || true
+    #       sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/my-image:${{ steps.vars.outputs.sha_short }}
+    #       docker run -d -p 80:80 --name my-container ${{ secrets.DOCKERHUB_USERNAME }}/my-image:${{ steps.vars.outputs.sha_short }}

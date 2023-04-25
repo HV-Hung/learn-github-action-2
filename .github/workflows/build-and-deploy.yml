@@ -23,7 +23,7 @@ jobs:
       with:
         context: .
         push: true
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/my-image:${{ github.sha }}
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/my-image:${{ github.sha:0:8 }}
 
     - name: Install SSH client
       run: sudo apt-get install -y ssh
@@ -38,5 +38,5 @@ jobs:
         script: |
           sudo docker stop my-container || true
           sudo docker rm my-container || true
-          sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/my-image:${{ github.sha }}
-          docker run -d -p 80:80 --name my-container ${{ secrets.DOCKERHUB_USERNAME }}/my-image:${{ github.sha }}
+          sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/my-image:${{ github.sha:0:8 }}
+          docker run -d -p 80:80 --name my-container ${{ secrets.DOCKERHUB_USERNAME }}/my-image:${{ github.sha:0:8 }}

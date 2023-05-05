@@ -13,9 +13,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      
-      - name: list repo
-        run: ls -a
 
       - name: Set outputs
         id: vars
@@ -28,25 +25,25 @@ jobs:
           echo "Short sha :${{ steps.vars.outputs.sha_short }}"
           echo "Time :${{ steps.vars.outputs.time }}"
 
-  # build-push:
-  #   runs-on: self-hosted
-  #   needs: echo-info
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v3
+  build-push:
+    runs-on: self-hosted
+    needs: echo-info
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-  #     - name: Login to Docker Hub
-  #       uses: docker/login-action@v2
-  #       with:
-  #         username: ${{ secrets.DOCKERHUB_USERNAME }}
-  #         password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-  #     - name: Build and push Docker image
-  #       uses: docker/build-push-action@v2
-  #       with:
-  #         context: .
-  #         push: true
-  #         tags: ${{ secrets.DOCKERHUB_USERNAME }}/my-image:${{ needs.echo-info.outputs.short_sha }}
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/my-image:${{ needs.echo-info.outputs.short_sha }}
 
   # deploy:
   #   runs-on: ubuntu-latest

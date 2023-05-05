@@ -17,7 +17,7 @@ jobs:
       - name: Set outputs
         id: vars
         run: |
-          echo "sha_short=$(${{github.sha}})" >> $GITHUB_OUTPUT
+          echo "sha_short=${{github.sha}}" >> $GITHUB_OUTPUT
           echo "time=$(date +'%Y-%m-%dT%H:%M:%S')" >> $GITHUB_OUTPUT
 
       - name: echo info

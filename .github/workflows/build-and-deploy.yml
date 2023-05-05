@@ -6,7 +6,7 @@ on:
 
 jobs:
   echo-info:
-    runs-on: self-hosted
+    runs-on: ubuntu-lates
     outputs:
       short_sha: ${{ steps.vars.outputs.sha_short }}
       current_time: ${{ steps.vars.outputs.time }}

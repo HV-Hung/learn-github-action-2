@@ -25,7 +25,7 @@ jobs:
           echo "Short sha :${{ steps.vars.outputs.sha_short }}"
           echo "Time :${{ steps.vars.outputs.time }}"
 
-    echo-info-2:
+  echo-info-2:
     runs-on: self-hosted
     outputs:
       short_sha: ${{ steps.vars.outputs.sha_short }}
@@ -43,9 +43,9 @@ jobs:
       - name: echo info
         run: |
           echo "Short sha :${{ steps.vars.outputs.sha_short }}"
-          echo "Time :${{ steps.vars.outputs.time }}"
-  
-    echo-info-3:
+          echo "Time :${{ steps.vars.outputs.time }}"\
+          
+  echo-info-3:
     runs-on: self-hosted
     outputs:
       short_sha: ${{ steps.vars.outputs.sha_short }}

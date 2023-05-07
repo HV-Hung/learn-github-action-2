@@ -61,15 +61,16 @@ jobs:
           repository: HV-Hung/web-ci-k8s
           ref: 'main'
           token: ${{ secrets.PAT_TOKEN}}
+
       - name: setup git config
         run: |
-        git config --global user.email "hoangvanhung6876@gmail.com"
-        git config --global user.name "hung"
-        sed -i "s#tag.*#tag:${{ needs.echo-info.outputs.short_sha }}#g" helm/web-app/values.yaml
-        git add -A
-        git commit -am "Update image for - ${{ needs.echo-info.outputs.short_sha}}"
-        run: echo ${{ github }}
-        - run: git push origin main
+          git config --global user.email "hoangvanhung6876@gmail.com"
+          git config --global user.name "hung"
+          sed -i "s#tag.*#tag:${{ needs.echo-info.outputs.short_sha }}#g" helm/web-app/values.yaml
+          git add -A
+          git commit -am "Update image for - ${{ needs.echo-info.outputs.short_sha}}"
+      - run: echo ${{ github }}
+      - run: git push origin main
 
      
 
